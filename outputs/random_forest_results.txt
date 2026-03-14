@@ -1,0 +1,23 @@
+RANDOM FOREST MODEL RESULTS
+==================================================
+
+Accuracy:  0.9690
+Precision: 0.9691
+Recall:    0.9690
+F1 Score:  0.9690
+
+Confusion Matrix:
+[[1476   16   25]
+ [  39 1385    7]
+ [  24   13 1015]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+      Stable       0.96      0.97      0.97      1517
+     At Risk       0.98      0.97      0.97      1431
+  Vulnerable       0.97      0.96      0.97      1052
+
+    accuracy                           0.97      4000
+   macro avg       0.97      0.97      0.97      4000
+weighted avg       0.97      0.97      0.97      4000
