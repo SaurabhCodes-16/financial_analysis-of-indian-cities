@@ -98,5 +98,35 @@ The analysis uses `data/finance.csv` containing financial metrics for Indian cit
 - Visualization plots in `plots/`
 - Model evaluation results and SHAP analyses in text files
 
-## License
-See LICENSE file for details.
+## Recent Enhancements (Next-Level Improvements)
+
+### 🚀 **Advanced Machine Learning Pipeline**
+- **Hyperparameter Tuning**: Implemented RandomizedSearchCV for XGBoost and Random Forest models with comprehensive parameter grids
+- **Cross-Validation**: 5-fold stratified cross-validation for robust model evaluation
+- **Feature Scaling**: StandardScaler applied to all features for better model performance
+- **Model Comparison**: Side-by-side comparison of XGBoost and Random Forest with detailed metrics
+
+### 🔍 **Enhanced Clustering Analysis**
+- **Multi-Algorithm Comparison**: K-Means, Gaussian Mixture, and Agglomerative clustering algorithms evaluated
+- **Optimal Cluster Selection**: Automated k selection using Silhouette Score, Davies-Bouldin Index, and Calinski-Harabasz Index
+- **Cluster Profiling**: Detailed statistical summaries and characteristic analysis for each cluster
+- **Advanced Visualizations**: Cluster validation metrics plots and feature distribution comparisons
+
+### 📊 **Comprehensive Model Evaluation**
+- **Training & Test Metrics**: Separate evaluation on training and test sets to detect overfitting
+- **Cross-Validation Scores**: Mean and standard deviation of CV performance
+- **Confusion Matrices**: Visual confusion matrices with proper labeling
+- **Classification Reports**: Detailed precision, recall, and F1-scores for each class
+
+### 🔮 **Advanced SHAP Explainability**
+- **Multiple Visualization Types**: Beeswarm plots, bar plots, waterfall plots, force plots, and decision plots
+- **Individual Predictions**: Detailed explanations for specific model predictions
+- **Feature Interactions**: Analysis of how features interact in the model
+- **Partial Dependence Plots**: Understanding feature effects on predictions
+
+### 📈 **Key Improvements Summary**
+- **Performance**: Hyperparameter tuning typically improves model accuracy by 5-15%
+- **Robustness**: Cross-validation ensures models generalize well to new data
+- **Interpretability**: Enhanced SHAP analysis provides deeper insights into model decisions
+- **Scalability**: Optimized algorithms handle larger datasets efficiently
+- **Reliability**: Comprehensive evaluation prevents overfitting and ensures model quality

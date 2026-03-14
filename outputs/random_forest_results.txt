@@ -1,23 +1,49 @@
-RANDOM FOREST MODEL RESULTS
+Random Forest Model Results
 ==================================================
 
-Accuracy:  0.9690
-Precision: 0.9691
-Recall:    0.9690
-F1 Score:  0.9690
+Best Parameters: {'n_estimators': 500, 'min_samples_split': 5, 'min_samples_leaf': 1, 'max_features': None, 'max_depth': 20, 'criterion': 'entropy', 'bootstrap': True}
+Best CV Score: 0.9834
 
-Confusion Matrix:
-[[1476   16   25]
- [  39 1385    7]
- [  24   13 1015]]
+TRAINING METRICS:
+Accuracy: 1.0000
+Precision: 1.0000
+Recall: 1.0000
+F1-Score: 1.0000
 
-Classification Report:
+TEST SET METRICS:
+Accuracy: 0.9825
+Precision: 0.9825
+Recall: 0.9825
+F1-Score: 0.9825
+
+Cross-validation F1: 0.9834 (+/- 0.0068)
+
+CLASSIFICATION REPORT:
               precision    recall  f1-score   support
 
-      Stable       0.96      0.97      0.97      1517
-     At Risk       0.98      0.97      0.97      1431
-  Vulnerable       0.97      0.96      0.97      1052
+      Stable       0.98      0.97      0.98      1382
+     At Risk       1.00      0.97      0.99       111
+  Vulnerable       0.98      0.99      0.99      2507
 
-    accuracy                           0.97      4000
-   macro avg       0.97      0.97      0.97      4000
-weighted avg       0.97      0.97      0.97      4000
+    accuracy                           0.98      4000
+   macro avg       0.99      0.98      0.98      4000
+weighted avg       0.98      0.98      0.98      4000
+
+
+TOP 15 FEATURE IMPORTANCES:
+                    feature  importance
+                Savings_Gap    0.302473
+              Expense_Ratio    0.174118
+                 Dependents    0.172672
+              Recovery_Rate    0.143283
+          Disposable_Income    0.063026
+Potential_Savings_Education    0.053729
+                  Education    0.043544
+             Total_Expenses    0.003269
+                  Utilities    0.002777
+ Desired_Savings_Percentage    0.002680
+                     Income    0.002676
+                  Groceries    0.002657
+              Miscellaneous    0.002584
+    Total_Potential_Savings    0.002409
+                 Healthcare    0.002369
