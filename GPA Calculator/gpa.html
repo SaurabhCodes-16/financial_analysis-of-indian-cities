@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPA Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --card: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #7c6af7;
+    --accent2: #f76a8a;
+    --accent3: #6af7c8;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --gold: #f7c46a;
+  }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px; left: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(124,106,247,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -200px; right: -200px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(247,106,138,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(124,106,247,0.3);
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    background: rgba(124,106,247,0.06);
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 3.6rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 15px;
+    font-weight: 400;
+  }
+
+  /* Semester Info */
+  .sem-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.5s ease 0.1s both;
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  input, select {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    padding: 12px 16px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+  }
+
+  input:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(124,106,247,0.15);
+  }
+
+  select option { background: var(--card); }
+
+  /* Subjects Table */
+  .table-wrapper {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    animation: fadeUp 0.5s ease 0.2s both;
+  }
+
+  .table-header {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 1.2fr 80px;
+    gap: 0;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+  }
+
+  .table-header span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .subject-row {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 1.2fr 80px;
+    gap: 0;
+    padding: 10px 20px;
+    border-bottom: 1px solid rgba(42,42,58,0.5);
+    align-items: center;
+    transition: background 0.15s;
+    animation: fadeIn 0.3s ease both;
+  }
+
+  .subject-row:last-child { border-bottom: none; }
+  .subject-row:hover { background: rgba(124,106,247,0.04); }
+
+  .subject-row input {
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    margin-right: 8px;
+  }
+
+  .subject-row select {
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 14px;
+    margin-right: 8px;
+  }
+
+  .grade-select {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 8px 10px;
+    width: calc(100% - 8px);
+    cursor: pointer;
+  }
+
+  .delete-btn {
+    background: none;
+    border: 1px solid transparent;
+    color: var(--muted);
+    cursor: pointer;
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    margin: 0 auto;
+  }
+
+  .delete-btn:hover {
+    background: rgba(247,106,138,0.1);
+    border-color: rgba(247,106,138,0.3);
+    color: var(--accent2);
+  }
+
+  /* Buttons */
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.5s ease 0.3s both;
+  }
+
+  .btn {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 22px;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .btn-add {
+    background: rgba(124,106,247,0.15);
+    border: 1px solid rgba(124,106,247,0.3);
+    color: var(--accent);
+    flex: 1;
+  }
+
+  .btn-add:hover {
+    background: rgba(124,106,247,0.25);
+    transform: translateY(-1px);
+  }
+
+  .btn-calc {
+    background: linear-gradient(135deg, var(--accent), #a08cf7);
+    color: #fff;
+    flex: 1;
+    box-shadow: 0 4px 20px rgba(124,106,247,0.3);
+  }
+
+  .btn-calc:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(124,106,247,0.4);
+  }
+
+  .btn-reset {
+    background: rgba(247,106,138,0.1);
+    border: 1px solid rgba(247,106,138,0.2);
+    color: var(--accent2);
+  }
+
+  .btn-reset:hover {
+    background: rgba(247,106,138,0.18);
+    transform: translateY(-1px);
+  }
+
+  /* Result Card */
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    display: none;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-card.show { display: block; }
+
+  .result-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+  }
+
+  .result-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .gpa-display {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .gpa-number {
+    font-size: 5rem;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--accent3), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gpa-label {
+    font-size: 14px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .grade-badge {
+    font-size: 1.8rem;
+    font-weight: 800;
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .grade-A { background: rgba(106,247,200,0.15); color: var(--accent3); border: 1px solid rgba(106,247,200,0.3); }
+  .grade-B { background: rgba(124,106,247,0.15); color: var(--accent); border: 1px solid rgba(124,106,247,0.3); }
+  .grade-C { background: rgba(247,196,106,0.15); color: var(--gold); border: 1px solid rgba(247,196,106,0.3); }
+  .grade-D { background: rgba(247,106,138,0.15); color: var(--accent2); border: 1px solid rgba(247,106,138,0.3); }
+  .grade-F { background: rgba(247,106,106,0.2); color: #f77a7a; border: 1px solid rgba(247,106,106,0.3); }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .stat-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    color: var(--text);
+  }
+
+  .stat-lbl {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Subject breakdown */
+  .breakdown-title {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 12px;
+  }
+
+  .breakdown-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .breakdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--card);
+    border-radius: 10px;
+    padding: 10px 14px;
+  }
+
+  .b-name { flex: 1; font-size: 14px; font-weight: 600; }
+  .b-credits { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
+  .b-grade { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; }
+  .b-points { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
+
+  .bar-wrap { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+
+  /* Error */
+  .error-msg {
+    background: rgba(247,106,138,0.1);
+    border: 1px solid rgba(247,106,138,0.3);
+    border-radius: 10px;
+    color: var(--accent2);
+    font-size: 13px;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    display: none;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .error-msg.show { display: block; }
+
+  @keyframes fadeDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeUp   { from { opacity:0; transform:translateY(20px);  } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+  @keyframes popIn    { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
+
+  @media (max-width: 540px) {
+    .sem-bar { grid-template-columns: 1fr; }
+    .table-header, .subject-row { grid-template-columns: 1.6fr 1fr 1fr 50px; padding: 10px 12px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .gpa-number { font-size: 3.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="badge">Academic Tool</div>
+    <h1>GPA Calculator</h1>
+    <p class="subtitle">Calculate your semester GPA with credits & grades</p>
+  </header>
+
+  <div class="sem-bar">
+    <div class="field-group">
+      <label>Semester Name</label>
+      <input type="text" id="semName" placeholder="e.g. Fall 2024 — Semester 3">
+    </div>
+    <div class="field-group">
+      <label>Grading Scale</label>
+      <input type="text" value="10-Point Scale  (A+=10, A=9, B+=8 ...)" readonly style="color:var(--accent);cursor:default;background:rgba(124,106,247,0.07);">
+    </div>
+  </div>
+
+  <div class="error-msg" id="errorMsg"></div>
+
+  <div class="table-wrapper">
+    <div class="table-header">
+      <span>Subject Name</span>
+      <span>Credits</span>
+      <span>Grade</span>
+      <span style="text-align:center">Del</span>
+    </div>
+    <div id="subjectList"></div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-add" onclick="addRow()">＋ Add Subject</button>
+    <button class="btn btn-calc" onclick="calculate()">⚡ Calculate GPA</button>
+    <button class="btn btn-reset" onclick="resetAll()">↺ Reset</button>
+  </div>
+
+  <div class="result-card" id="resultCard">
+    <div class="result-top">
+      <div>
+        <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:6px">Semester GPA</div>
+        <div class="gpa-display">
+          <div class="gpa-number" id="gpaVal">0.00</div>
+          <div class="gpa-label">/ <span id="scaleLabel">4.0</span></div>
+        </div>
+      </div>
+      <div class="grade-badge" id="letterGrade">A</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-val" id="totalCredits">0</div>
+        <div class="stat-lbl">Total Credits</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="totalSubjects">0</div>
+        <div class="stat-lbl">Subjects</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="totalPoints">0.0</div>
+        <div class="stat-lbl">Grade Points</div>
+      </div>
+    </div>
+
+    <div class="breakdown-title">Subject Breakdown</div>
+    <div class="breakdown-list" id="breakdown"></div>
+  </div>
+</div>
+
+<script>
+  // A+=10, A=9, B+=8, B=7, C+=6, C=5, D+=4, D=3, E=2, F=1/0
+  const GRADE_MAP = {
+    'A+': 10,
+    'A':   9,
+    'B':  8,
+    'C':   7,
+    'D':  6,
+    'E':   5,
+    
+  };
+
+  const MAX_SCALE = 10;
+
+  let subjects = [
+    { name: '', credits: '', grade: '' },
+    { name: '', credits: '', grade: '' },
+    { name: '', credits: '', grade: '' }
+  ];
+
+  function getScale() { return MAX_SCALE; }
+
+  function getGradeMap() { return GRADE_MAP; }
+
+  function gradeOptions() {
+    return '<option value="">Grade</option>' +
+      Object.entries(GRADE_MAP).map(([g, v]) =>
+        `<option value="${g}">${g} (${v})</option>`
+      ).join('');
+  }
+
+  function renderRows() {
+    const list = document.getElementById('subjectList');
+    list.innerHTML = subjects.map((s, i) => `
+      <div class="subject-row" id="row-${i}">
+        <input type="text" placeholder="Subject name" value="${s.name}"
+          oninput="subjects[${i}].name=this.value">
+        <input type="number" placeholder="Credits" min="0.5" max="10" step="0.5" value="${s.credits}"
+          oninput="subjects[${i}].credits=this.value" style="margin-right:8px">
+        <select class="grade-select" onchange="subjects[${i}].grade=this.value">
+          ${gradeOptions().replace(`value="${s.grade}"`, `value="${s.grade}" selected`)}
+        </select>
+        <button class="delete-btn" onclick="deleteRow(${i})" title="Remove">×</button>
+      </div>
+    `).join('');
+  }
+
+  function addRow() {
+    subjects.push({ name: '', credits: '', grade: '' });
+    renderRows();
+    const list = document.getElementById('subjectList');
+    list.lastElementChild?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function deleteRow(i) {
+    if (subjects.length <= 1) return;
+    subjects.splice(i, 1);
+    renderRows();
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3000);
+  }
+
+  function getLetterFromGPA(gpa, scale) {
+    const pct = gpa / scale;
+    if (pct >= 0.925) return ['A+', 'grade-A'];
+    if (pct >= 0.875) return ['A',  'grade-A'];
+    if (pct >= 0.825) return ['A-', 'grade-A'];
+    if (pct >= 0.775) return ['B+', 'grade-B'];
+    if (pct >= 0.725) return ['B',  'grade-B'];
+    if (pct >= 0.675) return ['B-', 'grade-B'];
+    if (pct >= 0.575) return ['C+', 'grade-C'];
+    if (pct >= 0.525) return ['C',  'grade-C'];
+    if (pct >= 0.475) return ['C-', 'grade-C'];
+    if (pct >= 0.375) return ['D',  'grade-D'];
+    return ['F', 'grade-F'];
+  }
+
+  function getBarColor(gpa, scale) {
+    const p = gpa / scale;
+    if (p >= 0.8) return 'linear-gradient(90deg,var(--accent3),#4af7a0)';
+    if (p >= 0.6) return 'linear-gradient(90deg,var(--accent),#a08cf7)';
+    if (p >= 0.4) return 'linear-gradient(90deg,var(--gold),#f7a06a)';
+    return 'linear-gradient(90deg,var(--accent2),#f76a6a)';
+  }
+
+  function calculate() {
+    const map = getGradeMap();
+    const scale = getScale();
+    let totalCredits = 0, totalPoints = 0, valid = [];
+
+    for (let i = 0; i < subjects.length; i++) {
+      const s = subjects[i];
+      const credits = parseFloat(s.credits);
+      const grade = s.grade;
+      if (!s.name && !s.credits && !s.grade) continue;
+      if (!s.name) { showError(`Row ${i+1}: Subject name is missing.`); return; }
+      if (!credits || credits <= 0) { showError(`"${s.name}": Enter valid credits.`); return; }
+      if (!grade) { showError(`"${s.name}": Please select a grade.`); return; }
+
+      const pts = map[grade];
+      totalCredits += credits;
+      totalPoints += pts * credits;
+      valid.push({ name: s.name, credits, grade, pts });
+    }
+
+    if (valid.length === 0) { showError('Please fill in at least one subject.'); return; }
+
+    const gpa = totalPoints / totalCredits;
+    const [letter, cls] = getLetterFromGPA(gpa, scale);
+
+    document.getElementById('gpaVal').textContent = gpa.toFixed(2);
+    document.getElementById('scaleLabel').textContent = '10';
+    document.getElementById('totalCredits').textContent = totalCredits;
+    document.getElementById('totalSubjects').textContent = valid.length;
+    document.getElementById('totalPoints').textContent = totalPoints.toFixed(1);
+
+    const lb = document.getElementById('letterGrade');
+    lb.textContent = letter;
+    lb.className = 'grade-badge ' + cls;
+
+    const bd = document.getElementById('breakdown');
+    bd.innerHTML = valid.map(s => {
+      const pct = Math.round((s.pts / scale) * 100);
+      return `
+        <div class="breakdown-item">
+          <div class="b-name">${s.name}</div>
+          <div class="b-credits">${s.credits} cr</div>
+          <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%;background:${getBarColor(s.pts,scale)}"></div></div>
+          <div class="b-grade" style="color:${s.pts/scale>=0.8?'var(--accent3)':s.pts/scale>=0.6?'var(--accent)':s.pts/scale>=0.4?'var(--gold)':'var(--accent2)'}">${s.grade}</div>
+          <div class="b-points">${(s.pts * s.credits).toFixed(1)}pts</div>
+        </div>`;
+    }).join('');
+
+    const card = document.getElementById('resultCard');
+    card.classList.remove('show');
+    void card.offsetWidth;
+    card.classList.add('show');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function resetAll() {
+    subjects = [{ name:'',credits:'',grade:'' },{ name:'',credits:'',grade:'' },{ name:'',credits:'',grade:'' }];
+    document.getElementById('semName').value = '';
+    document.getElementById('resultCard').classList.remove('show');
+    renderRows();
+  }
+
+  renderRows();
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+SHAP FEATURE IMPORTANCE RANKING
+==================================================
+
+                        Feature  Importance
+                  Expense_Ratio    0.468304
+                     Dependents    0.342226
+                    Savings_Gap    0.088410
+                  Recovery_Rate    0.064980
+              Disposable_Income    0.016821
+                            Age    0.011756
+                           Rent    0.007319
+                         Income    0.006920
+                      Education    0.006116
+    Potential_Savings_Education    0.005317
+                      Insurance    0.004721
+                      Utilities    0.003311
+                 Loan_Repayment    0.002780
+        Total_Potential_Savings    0.002696
+                  Miscellaneous    0.002617
+               City_Tier_Tier_2    0.002590
+Potential_Savings_Entertainment    0.002589
+                     Eating_Out    0.002533
+                      Transport    0.002409
+Potential_Savings_Miscellaneous    0.002081
+    Potential_Savings_Groceries    0.002043
+     Desired_Savings_Percentage    0.001987
+                     Healthcare    0.001947
+   Potential_Savings_Eating_Out    0.001897
+    Potential_Savings_Utilities    0.001794
+                  Entertainment    0.001489
+   Potential_Savings_Healthcare    0.001271
+                Desired_Savings    0.001121
+    Potential_Savings_Transport    0.001110
+                 Total_Expenses    0.001001
+             Occupation_Retired    0.000719
+                      Groceries    0.000551
+               City_Tier_Tier_3    0.000290
+             Occupation_Student    0.000207
+       Occupation_Self_Employed    0.000127
+
+Base Value (Expected Model Output): N/A (PermutationExplainer)
