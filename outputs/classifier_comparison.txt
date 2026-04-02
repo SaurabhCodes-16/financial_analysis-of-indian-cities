@@ -1,0 +1,22 @@
+CLASSIFIER COMPARISON RESULTS
+================================================================================
+
+| Classifier           | Accuracy   | Precision  | Recall     | F1 Score   |
+|--------------------|----------|----------|----------|----------|
+| Logistic Regression  | 0.7903     | 0.8009     | 0.7903     | 0.7898     |
+| Decision Tree        | 0.9665     | 0.9665     | 0.9665     | 0.9665     |
+| Random Forest        | 0.9698     | 0.9698     | 0.9698     | 0.9698     |
+| SVM                  | 0.7732     | 0.7999     | 0.7732     | 0.7711     |
+| KNN                  | 0.7925     | 0.7992     | 0.7925     | 0.7925     |
+| Naive Bayes          | 0.5138     | 0.6415     | 0.5138     | 0.4761     |
+| Gradient Boosting    | 0.9835     | 0.9835     | 0.9835     | 0.9835     |
+| AdaBoost             | 0.9423     | 0.9428     | 0.9423     | 0.9420     |
+| Extra Trees          | 0.9610     | 0.9610     | 0.9610     | 0.9610     |
+| XGBoost              | 0.9850     | 0.9850     | 0.9850     | 0.9850     |
+| LightGBM             | 0.9852     | 0.9853     | 0.9852     | 0.9853     |
+| CatBoost             | 0.9875     | 0.9875     | 0.9875     | 0.9875     |
+| MLP Classifier       | 0.6995     | 0.8090     | 0.6995     | 0.6567     |
+| Ridge Classifier     | 0.9287     | 0.9287     | 0.9287     | 0.9286     |
+| Linear SVC           | 0.9370     | 0.9380     | 0.9370     | 0.9367     |
+
+Note: All metrics are weighted averages for multi-class classification.
