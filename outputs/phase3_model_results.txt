@@ -12,35 +12,26 @@ HYPERPARAMETERS USED:
   use_label_encoder: False
 
 TRAINING METRICS:
-Accuracy: 0.9875
-Precision: 0.9876
-Recall: 0.9875
-F1-Score: 0.9875
+Accuracy: 1.0000
+Precision: 1.0000
+Recall: 1.0000
+F1-Score: 1.0000
 
 TEST METRICS:
-Accuracy: 0.9525
-Precision: 0.9528
-Recall: 0.9525
-F1-Score: 0.9525
+Accuracy: 0.9898
+Precision: 0.9898
+Recall: 0.9898
+F1-Score: 0.9897
 
-Cross-validation F1: 0.9456 (+/- 0.0123)
+Cross-validation F1: 0.9882 (+/- 0.0049)
 
 CLASSIFICATION REPORT:
               precision    recall  f1-score   support
 
-      Stable       0.95      0.97      0.96      1517
-     At Risk       0.96      0.93      0.94      1431
-  Vulnerable       0.95      0.95      0.95      1052
+      Stable       0.99      0.98      0.99      1382
+     At Risk       1.00      0.97      0.99       111
+  Vulnerable       0.99      1.00      0.99      2507
 
-    accuracy                           0.95      4000
-   macro avg       0.95      0.95      0.95      4000
-weighted avg       0.95      0.95      0.95      4000
-
-ENHANCEMENTS DEMONSTRATED:
-✅ Feature Scaling with StandardScaler
-✅ Stratified Train/Test Split
-✅ Comprehensive Evaluation Metrics
-✅ Cross-Validation Analysis
-✅ Confusion Matrix Visualization
-✅ Detailed Classification Report
-✅ Model Persistence (saved scaler)
+    accuracy                           0.99      4000
+   macro avg       0.99      0.98      0.99      4000
+weighted avg       0.99      0.99      0.99      4000
